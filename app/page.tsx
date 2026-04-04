@@ -1,12 +1,15 @@
 'use client';
-import React from "react";
+import HomePage from "@/components/main/Home";
+import React,{FC} from "react";
+interface Props{}
+ 
 
-const Home:React.FC = () =>{
+const MainPage:React.FC<Props> = () =>{
 
   return (
-    <p>Hello world</p>
+    <HomePage/>
   )
 
 }
 
-export default Home;
+export default MainPage;
