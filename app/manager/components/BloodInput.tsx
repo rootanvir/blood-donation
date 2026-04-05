@@ -48,7 +48,7 @@ export default function BloodDonorForm() {
 
   return (
     <div
-      className="min-h-screen flex items-center justify-center px-4 py-16"
+      className="min-h-screen flex items-top justify-center px-4 py-5"
       style={{
         background: `
           radial-gradient(ellipse 80% 60% at 50% 0%, rgba(200,16,46,0.12) 0%, transparent 60%),
