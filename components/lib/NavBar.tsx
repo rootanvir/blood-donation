@@ -56,13 +56,13 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       {open && (
-        <div className="md:hidden border-t border-white/10 px-6 pb-5 pt-3 flex flex-col gap-1">
+        <div className="md:hidden border-t border-white/10 px-6 pb-5 pt-3 flex flex-col gap-1 ">
           {navLinks.map((l) => (
             <Link
               key={l}
               href="#"
               onClick={() => setOpen(false)}
-              className="text-white/70 hover:text-white text-sm font-medium py-2.5 border-b border-white/5 last:border-0 no-underline transition-colors"
+              className="text-white/90 hover:text-white text-sm font-medium py-2.5 border-b border-white/5 last:border-0 no-underline transition-colors "
             >
               {l}
             </Link>
