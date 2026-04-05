@@ -26,7 +26,7 @@ export default function HeroSection() {
           </div>
 
           <h1 className="font-bold text-white leading-tight tracking-tight text-4xl md:text-5xl">
-            একটি <em className="text-rose-400 not-italic">দান,</em>
+            একটি <span className="text-rose-400">রক্ত</span>  দান, 
             <br />
             একটি <em className="text-rose-400 not-italic">জীবন বাঁচায়।</em>
           </h1>

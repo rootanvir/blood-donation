@@ -26,18 +26,7 @@ export default function Footer() {
               রক্তদাতাদের সাথে রোগীদের সংযুক্ত করে আসছি।
             </p>
 
-            {/* Social Icons */}
-            <div className="flex gap-3 mt-6">
-              {["📘", "🐦", "📸", "▶️"].map((icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-sm hover:bg-red-700/30 hover:border-red-700/50 transition-all"
-                >
-                  {icon}
-                </a>
-              ))}
-            </div>
+
           </div>
 
           {/* Dynamic Links Sections */}
