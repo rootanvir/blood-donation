@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Blood Donation",
+  title: "রক্তদান",
   description: "Donate Blood & Save Life",
 };
 
