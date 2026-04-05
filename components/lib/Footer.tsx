@@ -22,7 +22,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-white/40 text-sm leading-relaxed max-w-xs">
-              বাংলাদেশের সবচেয়ে বিশ্বস্ত রক্তদান প্ল্যাটফর্ম। ২০২১ সাল থেকে
+              বাংলাদেশের সবচেয়ে বিশ্বস্ত রক্তদান প্ল্যাটফর্ম।
               রক্তদাতাদের সাথে রোগীদের সংযুক্ত করে আসছি।
             </p>
 
