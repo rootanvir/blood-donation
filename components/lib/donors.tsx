@@ -19,3 +19,13 @@ export async function addDonor(donor: Donor) {
   if (error) throw new Error(error.message);
   return data;
 }
+
+export async function checkPhoneExists(phone: string) {
+  const { data } = await supabase
+    .from("blood_donors")
+    .select("phone")
+    .eq("phone", phone)
+    .single();
+
+  return !!data;
+}

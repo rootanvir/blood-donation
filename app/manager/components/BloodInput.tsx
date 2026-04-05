@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { addDonor } from "@/components/lib/donors";
+import { checkPhoneExists } from "@/components/lib/donors";
 
 const bloodTypes = ["A+", "A−", "B+", "B−", "AB+", "AB−", "O+", "O−"];
 const divisions = ["Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barisal", "Sylhet", "Rangpur", "Mymensingh"];
@@ -29,6 +30,14 @@ export default function BloodDonorForm() {
 
     setLoading(true);
     try {
+
+      const exists = await checkPhoneExists(form.phone);
+      if (exists) {
+        setErrors({ phone: "এই নম্বরটি আগে থেকেই নিবন্ধিত আছে" });
+        setLoading(false);
+        return;
+      }
+
       await addDonor(form);
       setForm(empty);
       setErrors({});
