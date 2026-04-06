@@ -5,7 +5,7 @@ import { checkPhoneExists } from "@/components/lib/donors";
 
 const bloodTypes = ["A+", "A−", "B+", "B−", "AB+", "AB−", "O+", "O−"];
 const divisions = ["Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barisal", "Sylhet", "Rangpur", "Mymensingh"];
-const empty = { name: "", blood: "", phone: "", station: "", address: "", division: "" };
+const empty = { name: "", blood: "", phone: "", police_station: "", address: "", division: "" };
 
 export default function BloodDonorForm() {
   const [form, setForm] = useState(empty);
@@ -19,7 +19,7 @@ export default function BloodDonorForm() {
     if (!form.blood) e.blood = "রক্তের গ্রুপ বেছে নিন";
     if (!form.phone.trim()) e.phone = "ফোন নম্বর আবশ্যক";
     else if (!/^01\d{9}$/.test(form.phone.replace(/[-\s]/g, ""))) e.phone = "সঠিক ১১ ডিজিটের নম্বর দিন";
-    if (!form.station.trim()) e.station = "থানার নাম আবশ্যক";
+    if (!form.police_station.trim()) e.police_station = "থানার নাম আবশ্যক";
     if (!form.division) e.division = "বিভাগ বেছে নিন";
     return e;
   };
@@ -130,17 +130,17 @@ export default function BloodDonorForm() {
             {errors.division && <p className="text-red-400 text-xs mt-1.5">{errors.division}</p>}
           </div>
 
-          {/* Station */}
+          {/* police_station */}
           <div>
             <label className="block text-xs font-semibold text-white/70 uppercase tracking-widest mb-2">থানা</label>
             <input
               type="text"
-              value={form.station}
-              onChange={e => { setForm({ ...form, station: e.target.value }); setErrors({ ...errors, station: "" }); }}
+              value={form.police_station}
+              onChange={e => { setForm({ ...form, police_station: e.target.value }); setErrors({ ...errors, police_station: "" }); }}
               placeholder="যেমন: Dhamrai"
-              className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm outline-none transition-all focus:bg-white/8 focus:border-rose-500/60 ${errors.station ? "border-red-500/60" : "border-white/10"}`}
+              className={`w-full bg-white/5 border rounded-xl px-4 py-3 text-white placeholder-white/20 text-sm outline-none transition-all focus:bg-white/8 focus:border-rose-500/60 ${errors.police_station ? "border-red-500/60" : "border-white/10"}`}
             />
-            {errors.station && <p className="text-red-400 text-xs mt-1.5">{errors.station}</p>}
+            {errors.police_station && <p className="text-red-400 text-xs mt-1.5">{errors.police_station}</p>}
           </div>
 
           {/* Address */}

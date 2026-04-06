@@ -5,7 +5,7 @@ export type Donor = {
   blood: string;
   phone: string;
   division: string;
-  station: string;
+  police_station: string;
   address: string;
 };
 
@@ -28,4 +28,13 @@ export async function checkPhoneExists(phone: string) {
     .single();
 
   return !!data;
+}
+export async function getDonors() {
+  const { data, error } = await supabase
+    .from("blood_donors")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) throw new Error(error.message);
+  return data;
 }

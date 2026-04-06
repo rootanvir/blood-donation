@@ -1,18 +1,15 @@
-// page.tsx
-"use client";
-import { useState } from "react";
-import ManagerNav from "./components/ManagerNav";
-import BloodDonorForm from "./components/BloodInput";
+// app/manager/page.tsx
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+import ManagerDashboard from './components/ManagerDashboard';
 
+export default async function ManagerPage() {
+    const cookieStore = await cookies();
+    const isLoggedIn = cookieStore.get('manager_logged_in')?.value === 'true';
 
-export default function Page() {
-  const [active, setActive] = useState("add");
+    if (!isLoggedIn) {
+        redirect('/manager/login');
+    }
 
-  return (
-    <div  className="h-auto">
-      <ManagerNav active={active} setActive={setActive} />
-      {active === "add" && <BloodDonorForm />}
-      {active === "list" && <div>list</div>}
-    </div>
-  );
+    return <ManagerDashboard />;
 }

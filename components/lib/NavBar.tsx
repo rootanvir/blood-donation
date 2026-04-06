@@ -1,10 +1,15 @@
+'use client'
 import Link from "next/link";
 import { useState } from "react";
+import { LogIn } from 'lucide-react';
+import { useRouter } from "next/navigation";
 
 const navLinks = ["রক্তদাতা খুঁজুন", "ব্লাড ব্যাংক", "ক্যাম্পেইন", "আমাদের সম্পর্কে"];
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+
+  const router = useRouter();
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1A0A0A]/30 backdrop-blur-md">
@@ -29,6 +34,10 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
+          <button className="flex bg-rose-700 p-2 rounded-full cursor-pointer w-min px-6 shadow-lg"
+          onClick={() => router.push("login")}>
+            লগইন   <LogIn />
+          </button>
         </ul>
 
 
@@ -42,11 +51,11 @@ export default function Navbar() {
             aria-label="Toggle menu"
           >
             {open ? (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg className="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
             ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <svg className="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
@@ -67,6 +76,11 @@ export default function Navbar() {
               {l}
             </Link>
           ))}
+          <button className="flex bg-rose-700 p-2 rounded-full cursor-pointer w-min px-6 shadow-lg"
+            onClick={() => router.push("login")}
+          >
+            লগইন   <LogIn />
+          </button>
         </div>
       )}
     </nav>
