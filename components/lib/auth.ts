@@ -1,6 +1,6 @@
 import { cookies } from 'next/headers';
 
-const SESSION_DURATION = 60 * 60 * 24 * 7;
+const SESSION_DURATION = 60 * 60 * 24 * 15;
 
 export async function createSession(username: string) {
     try {
