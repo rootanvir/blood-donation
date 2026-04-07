@@ -62,7 +62,7 @@ export default function BloodDonorForm() {
         <div className="fixed top-5 left-1/2 transform -translate-x-1/2 z-50 animate-in slide-in-from-top duration-300">
           <div className={`px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3 ${
             toast.type === 'success' 
-              ? 'bg-emerald-500 text-white border border-emerald-400' 
+              ? 'bg-green-800 text-white border border-emerald-400' 
               : 'bg-rose-700 text-white border border-red-400'
           }`}>
             {toast.type === 'success' ? (
