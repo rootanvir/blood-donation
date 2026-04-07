@@ -58,10 +58,10 @@ export default function ManagerLogin() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-zinc-950">
+        <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-zinc-950 ">
 
             {/* Back to home */}
-            <div className="w-full max-w-md mb-6">
+            <div className="w-full max-w-md mb-6 ">
                 <button
                     onClick={() => router.push("/")}
                     className="cursor-pointer inline-flex items-center gap-2 text-white/60 hover:text-white text-sm transition-colors"
@@ -73,7 +73,7 @@ export default function ManagerLogin() {
                 </button>
             </div>
 
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md ">
 
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -92,7 +92,7 @@ export default function ManagerLogin() {
                     </div>
                 </div>
 
-                <div className="bg-white/3 border border-white/8 rounded-2xl p-6 md:p-8 space-y-4">
+                <div className="bg-white/3 border border-gray-600 rounded-2xl p-6 md:p-8 space-y-4">
 
                     {/* Username Field */}
                     <div>

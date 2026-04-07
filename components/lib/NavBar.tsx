@@ -12,9 +12,9 @@ export default function Navbar() {
   const router = useRouter();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1A0A0A]/30 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md border-b border-gray-500">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-6 md:px-12 py-5">
+      <div className="flex items-center justify-between px-6 md:px-12 py-5 ">
         <Link href="/" className="flex items-center gap-2 no-underline">
           <span className="text-3xl leading-none">🩸</span>
           <span className="font-bold text-xl text-white tracking-tight">
@@ -34,17 +34,17 @@ export default function Navbar() {
               </Link>
             </li>
           ))}
-          <button className="flex bg-rose-700 p-2 rounded-full cursor-pointer w-min px-6 shadow-lg"
-          onClick={() => router.push("login")}>
-            লগইন   <LogIn />
+          <button 
+            className="flex items-center gap-2 bg-rose-700 hover:bg-rose-600 p-2 rounded-full cursor-pointer px-6 shadow-lg transition-all"
+            onClick={() => router.push("login")}
+          >
+            <span className="text-white">লগইন</span>
+            <LogIn className="w-4 h-4 text-white" />
           </button>
         </ul>
 
-
-
         {/* Mobile: CTA pill + hamburger */}
         <div className="flex md:hidden items-center gap-3">
-
           <button
             onClick={() => setOpen(!open)}
             className="text-white p-1"
@@ -65,21 +65,23 @@ export default function Navbar() {
 
       {/* Mobile drawer */}
       {open && (
-        <div className="md:hidden border-t border-white/10 px-6 pb-5 pt-3 flex flex-col gap-1 ">
+        <div className="md:hidden bg-black/95 backdrop-blur-md px-6 pb-5 pt-3 flex flex-col gap-1 border-t border-white/10">
           {navLinks.map((l) => (
             <Link
               key={l}
               href="#"
               onClick={() => setOpen(false)}
-              className="text-white/90 hover:text-white text-sm font-medium py-2.5 border-b border-white/5 last:border-0 no-underline transition-colors "
+              className="text-white/80 hover:text-white text-sm font-medium py-2.5 border-b border-white/10 last:border-0 no-underline transition-colors"
             >
               {l}
             </Link>
           ))}
-          <button className="flex bg-rose-700 p-2 rounded-full cursor-pointer w-min px-6 shadow-lg"
+          <button 
+            className="flex items-center justify-center gap-2 bg-rose-700 hover:bg-rose-600 rounded-full cursor-pointer px-6 py-2.5 shadow-lg transition-all mt-2"
             onClick={() => router.push("login")}
           >
-            লগইন   <LogIn />
+            <span className="text-white">লগইন</span>
+            <LogIn className="w-4 h-4 text-white" />
           </button>
         </div>
       )}

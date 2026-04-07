@@ -4,7 +4,7 @@ const bloodTypes = ["A+", "A−", "B+", "B−", "AB+", "AB−", "O+", "O−"];
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-black">
       {/* Hero glow background */}
       <div
         className="absolute inset-0 pointer-events-none"
@@ -26,7 +26,7 @@ export default function HeroSection() {
           </div>
 
           <h1 className="font-bold text-white leading-tight tracking-tight text-4xl md:text-5xl">
-            একটি <span className="text-rose-400">রক্ত</span>  দান, 
+            একটি <span className="text-rose-400">রক্ত</span> দান, 
             <br />
             একটি <em className="text-rose-400 not-italic">জীবন বাঁচায়।</em>
           </h1>

@@ -1,9 +1,9 @@
 "use server";
 
-import { redirect } from 'next/navigation';
-import { destroySession } from '@/components/lib/auth';
+import { destroySession } from "@/components/lib/auth";
 
 export async function logout() {
     await destroySession();
-    redirect('/login');
+    // Don't redirect here - let the client handle it
+    return { success: true };
 }

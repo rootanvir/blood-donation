@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { logout } from "@/app/actions/logout";
 
 const tabs = [
   { id: "add", label: "রক্তদাতা যোগ", icon: "🩸" },
@@ -11,6 +13,28 @@ const tabs = [
 
 export default function ManagerNav({ active, setActive }: { active: string; setActive: (id: string) => void }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    const confirmLogout = window.confirm("আপনি কি নিশ্চিত যে আপনি লগআউট করতে চান?");
+    
+    if (!confirmLogout) {
+      return;
+    }
+    
+    setIsLoggingOut(true);
+    try {
+      await logout();
+      router.push("/login");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout error:", error);
+      alert("লগআউট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।");
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <>
@@ -43,19 +67,33 @@ export default function ManagerNav({ active, setActive }: { active: string; setA
           ))}
         </div>
 
-        {/* Right — notification */}
-        <div className="shrink-0">
+        {/* Right — notification + logout */}
+        <div className="shrink-0 flex items-center gap-3">
+          {/* Notification button */}
           <button className="relative p-2 rounded-xl text-white/50 hover:text-white hover:bg-white/8 transition-all cursor-pointer">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
             </svg>
-            {/* badge */}
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full" />
+          </button>
+
+          {/* Logout button - Desktop only */}
+          <button 
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-400 hover:text-red-300 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+            </svg>
+            <span className="text-sm font-medium">
+              {isLoggingOut ? "লগআউট..." : "লগআউট"}
+            </span>
           </button>
         </div>
       </div>
 
-      {/* ── Mobile top bar ── */}
+      {/* ── Mobile top bar (no logout button here) ── */}
       <div className="md:hidden flex items-center justify-between px-4 py-3 border-b border-white/8 bg-black/20 backdrop-blur-md">
 
         {/* Left — hamburger */}
@@ -76,7 +114,7 @@ export default function ManagerNav({ active, setActive }: { active: string; setA
           </span>
         </div>
 
-        {/* Right — notification */}
+        {/* Right — only notification button (no logout) */}
         <button className="relative p-1.5 rounded-lg text-white/60 hover:text-white hover:bg-white/8 transition-all cursor-pointer">
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -85,7 +123,7 @@ export default function ManagerNav({ active, setActive }: { active: string; setA
         </button>
       </div>
 
-      {/* ── Mobile sidebar overlay ── */}
+      {/* ── Mobile sidebar overlay with logout button in drawer ── */}
       {sidebarOpen && (
         <div className="fixed inset-0 z-50 md:hidden flex">
           <div
@@ -130,9 +168,22 @@ export default function ManagerNav({ active, setActive }: { active: string; setA
               ))}
             </nav>
 
-            {/* Sidebar footer */}
-            <div className="px-5 py-4 border-t border-white/8">
-              <div className="flex items-center gap-2">
+            {/* Sidebar footer with logout button (only in drawer) */}
+            <div className="px-5 py-4 border-t border-white/8 space-y-3">
+              {/* Logout button in drawer for mobile */}
+              <button
+                onClick={handleLogout}
+                disabled={isLoggingOut}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all cursor-pointer text-red-400 hover:text-red-300 hover:bg-red-500/10 border border-red-500/20"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                <span>{isLoggingOut ? "লগআউট হচ্ছে..." : "লগআউট"}</span>
+              </button>
+              
+              {/* System status */}
+              <div className="flex items-center gap-2 pt-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                 <span className="text-xs text-white/30">সিস্টেম সক্রিয়</span>
               </div>
