@@ -38,8 +38,20 @@ export default function ManagerLogin() {
             formData.append("pswd", form.pswd);
 
             await managerLogin(formData);
+            
+            // The redirect will happen in the server action
+            // If we get here without error, manually redirect
+            router.push("/manager");
+            router.refresh();
         } catch (error: any) {
-            setErrors({ general: error.message || "লগইন ব্যর্থ হয়েছে" });
+            // Handle the error message from server
+            if (error.message === "NEXT_REDIRECT") {
+                // This is the redirect, so we should redirect
+                router.push("/manager");
+                router.refresh();
+            } else {
+                setErrors({ general: error.message || "লগইন ব্যর্থ হয়েছে" });
+            }
         } finally {
             setIsLoading(false);
         }
