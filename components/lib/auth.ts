@@ -1,71 +1,104 @@
-import * as crypto from 'crypto';
 import { cookies } from 'next/headers';
 
-const SESSION_DURATION = 60 * 60 * 24 * 7; // 7 days in seconds
+const SESSION_DURATION = 60 * 60 * 24 * 7;
 
-function createSessionToken(username: string): string {
-    const timestamp = Date.now();
-    const secret = process.env.AUTH_SECRET!;
-    
-    // Create a unique session token with timestamp and HMAC signature
-    const payload = `${username}|${timestamp}`;
-    const signature = crypto
-        .createHmac('sha256', secret)
-        .update(payload)
-        .digest('hex');
-    
-    // Combine payload and signature
-    return Buffer.from(`${payload}|${signature}`).toString('base64');
+export async function createSession(username: string) {
+    try {
+        const timestamp = Date.now();
+        const secret = process.env.AUTH_SECRET;
+        
+        if (!secret) {
+            throw new Error("AUTH_SECRET is not set");
+        }
+        
+        // Use Web Crypto API instead of Node.js crypto
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(secret);
+        const messageData = encoder.encode(`${username}|${timestamp}`);
+        
+        // Import key and create HMAC
+        const cryptoKey = await crypto.subtle.importKey(
+            'raw',
+            keyData,
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['sign']
+        );
+        
+        const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+        const signatureHex = Array.from(new Uint8Array(signature))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+        
+        const token = btoa(`${username}|${timestamp}|${signatureHex}`);
+        
+        const cookieStore = await cookies();
+        cookieStore.set('auth_token', token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: 'strict',
+            maxAge: SESSION_DURATION,
+            path: '/',
+        });
+    } catch (error) {
+        console.error("Session creation error:", error);
+        throw error;
+    }
 }
 
-function verifySessionToken(token: string): boolean {
+export async function verifySession(): Promise<boolean> {
     try {
-        const decoded = Buffer.from(token, 'base64').toString();
-        const [username, timestamp, signature] = decoded.split('|');
+        const cookieStore = await cookies();
+        const token = cookieStore.get('auth_token')?.value;
+        
+        if (!token) return false;
+        
+        const decoded = atob(token);
+        const parts = decoded.split('|');
+        
+        if (parts.length !== 3) return false;
+        
+        const [username, timestamp, signature] = parts;
         
         if (!username || !timestamp || !signature) return false;
         
-        // Check if session is expired
         const sessionAge = (Date.now() - parseInt(timestamp)) / 1000;
         if (sessionAge > SESSION_DURATION) return false;
         
-        // Verify signature
-        const expectedSignature = crypto
-            .createHmac('sha256', process.env.AUTH_SECRET!)
-            .update(`${username}|${timestamp}`)
-            .digest('hex');
+        const secret = process.env.AUTH_SECRET;
+        if (!secret) return false;
         
-        return crypto.timingSafeEqual(
-            Buffer.from(signature),
-            Buffer.from(expectedSignature)
+        // Verify signature using Web Crypto API
+        const encoder = new TextEncoder();
+        const keyData = encoder.encode(secret);
+        const messageData = encoder.encode(`${username}|${timestamp}`);
+        
+        const cryptoKey = await crypto.subtle.importKey(
+            'raw',
+            keyData,
+            { name: 'HMAC', hash: 'SHA-256' },
+            false,
+            ['sign']
         );
-    } catch {
+        
+        const expectedSignature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+        const expectedSignatureHex = Array.from(new Uint8Array(expectedSignature))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join('');
+        
+        return signature === expectedSignatureHex;
+        
+    } catch (error) {
+        console.error("Session verification error:", error);
         return false;
     }
 }
 
-export async function createSession(username: string) {
-    const token = createSessionToken(username);
-    const cookieStore = await cookies();
-    
-    cookieStore.set('auth_token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'strict',
-        maxAge: SESSION_DURATION,
-        path: '/',
-    });
-}
-
-export async function verifySession(): Promise<boolean> {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('auth_token')?.value;
-    
-    if (!token) return false;
-    return verifySessionToken(token);
-}
-
 export async function destroySession() {
-    const cookieStore = await cookies();
-    cookieStore.delete('auth_token');
+    try {
+        const cookieStore = await cookies();
+        cookieStore.delete('auth_token');
+    } catch (error) {
+        console.error("Session destroy error:", error);
+    }
 }

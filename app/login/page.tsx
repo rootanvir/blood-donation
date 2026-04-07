@@ -38,15 +38,13 @@ export default function ManagerLogin() {
             formData.append("pswd", form.pswd);
 
             await managerLogin(formData);
-            
-            // The redirect will happen in the server action
-            // If we get here without error, manually redirect
+
+            // If we get here without redirect, manually redirect
             router.push("/manager");
             router.refresh();
         } catch (error: any) {
-            // Handle the error message from server
-            if (error.message === "NEXT_REDIRECT") {
-                // This is the redirect, so we should redirect
+            // Check if it's a redirect (success case)
+            if (error.message === 'NEXT_REDIRECT' || error.digest === 'NEXT_REDIRECT') {
                 router.push("/manager");
                 router.refresh();
             } else {
@@ -56,6 +54,7 @@ export default function ManagerLogin() {
             setIsLoading(false);
         }
     };
+
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-zinc-950 ">
